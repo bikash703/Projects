@@ -1,41 +1,42 @@
-import random
-def gameWin(comp,you):
-    if(comp==you):
-        return None
-    elif(comp=='s'):
-        if(you=='w'):
-            return False
-        elif(you=='g'):
-            return True
-    elif(comp=='w'):
-        if(you=='g'):
-            return False
-        elif(you=='s'):
-            return True
-    elif(comp=='g'):
-        if(you=='s'):
-            return False
-        elif(you=='w'):
-            return True
+import os
 
-print("Comp Turn: Snake(s) Water(w) or Gun(g)")
-rand = random.randint(1, 3)
-if(rand==1):
-    comp='s'
-elif(rand==2):
-    comp='w'
-elif(rand==3):
-    comp='g'
+def CreateNoExits(folder):
+    if not os.path.exists(folder):
+        os.makedirs(folder)
 
-you=input("Your Turn: Snake(s) Water(w) or Gun(g)")
-a=gameWin(comp,you)
+def move(foldername,files):
+    for file in files:
+        os.replace(file,f"{foldername}/{file}")
 
-print(f"computer choose {comp}")
-print(f"you choose {you}")
+files=os.listdir()
+files.remove('main.py')
 
-if(a==None):
-    print("Your Match is Tie")
-elif(a):
-    print("you win!")
-else:
-    print("you lose!")
+CreateNoExits('Images')
+CreateNoExits('Docs')
+CreateNoExits('Medias')
+CreateNoExits('Zipfiles')
+CreateNoExits('Csv_Files')
+CreateNoExits('Others')
+imgext=['.png','.jpg','.jpeg']
+images=[file for file in files if os.path.splitext(file)[1].lower() in imgext ]
+Docsext=['.txt','.docx','.doc','.pdf']
+docs=[file for file in files if os.path.splitext(file)[1].lower() in Docsext] 
+mediaext=['.mp4','.mp3','.flv']
+media=[file for file in files if os.path.splitext(file)[1].lower() in mediaext] 
+zipext=['.zip','.exe','.rar']
+zipfiles=[file for file in files if os.path.splitext(file)[1].lower() in zipext]
+csvext=['.csv','.xls','.xml','.excel']
+csv_files=[file for file in files if os.path.splitext(file)[1].lower() in csvext]
+
+other=[]
+for file in files:
+    fil=os.path.splitext(file)[1].lower()
+    if (fil not in imgext) and (fil not in Docsext) and (fil not in mediaext) and (fil not in zipext) and (fil not in csvext) and os.path.isfile(file):
+        other.append(file)
+
+move('Images',images)
+move('Docs',docs)
+move('Medias',media)
+move('Zipfiles',zipfiles)
+move('Others',other)
+move('Csv_Files',csv_files)
